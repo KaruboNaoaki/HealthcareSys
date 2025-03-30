@@ -2,12 +2,12 @@
 ## Initial Setup
 ### 1. Navigate into directory where repository was stored on your machine in Command Prompt
 ### 2. install all dependencies with "pip install -r requirements.txt"
-###     2.1. Ignore any errors related to "Getting requirements to build wheel"
+### 2.1. Ignore any errors related to "Getting requirements to build wheel"
 ### 3. Set encryption key with "setx ENCRYPTION_KEY the_key_value_you_generated"
 ### 4. Run webapp with "python app.py"
 ### 5. Initialize database by navigating to "http://127.0.0.1:5000/init-db"
-###     5.1. Copy test account information for testing purposes and for default logins
-###     5.2. Go to login page by clicking "Go to login page"
+### 5.1. Copy test account information for testing purposes and for default logins
+### 5.2. Go to login page by clicking "Go to login page"
 ## Registering
 ### 1. Click "Register here"
 ### 2. Enter all information as prompted and then click "Create Account"
@@ -23,17 +23,17 @@
 ### 2. Security informaiton is available under "System Security"
 ### 3. To add a new user, click "Add New User"
 ### 4. Enter all information as prompted and then click "Create User"
-###     4.1. Copy the temporary password and secret key and send it to your user in a secure manner.
+### 4.1. Copy the temporary password and secret key and send it to your user in a secure manner.
 ## Doctor Dashboard
 ### 1. Patients are available under "Patient Directory"
 ### 2. To add a new patient, click "Add New Patient" 
-###     2.1. Enter all information as prompted and then click "Create Patient"
-###     2.2. Copy the temporary password and send it to your patient in a secure manner.
-###     2.3. Review patient information and click "Back to Dashboard"
+### 2.1. Enter all information as prompted and then click "Create Patient"
+### 2.2. Copy the temporary password and send it to your patient in a secure manner.
+### 2.3. Review patient information and click "Back to Dashboard"
 ### 3. To view a patient's information, click "View" under that patient's "Actions" tab
 ### 4. To add a medical record for a patient, click "Add Record"
-###     4.1. Enter all information as prompted and then click "Save Medical Record"
-###     4.2. Review patient information and click "Back to Dashboard"
+### 4.1. Enter all information as prompted and then click "Save Medical Record"
+### 4.2. Review patient information and click "Back to Dashboard"
 ## Patient Dashboard
 ### 1. Personal information is available under "Personal Information"
 ### 2. Medical records are available under "Your Medical Records"

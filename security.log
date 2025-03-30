@@ -653,3 +653,26 @@
 2025-03-30 12:28:37,588 - werkzeug - INFO -  * Debugger PIN: 730-758-859
 2025-03-30 12:28:42,186 - werkzeug - INFO - 127.0.0.1 - - [30/Mar/2025 12:28:42] "GET /init-db HTTP/1.1" 200 -
 2025-03-30 12:33:04,034 - werkzeug - INFO - 127.0.0.1 - - [30/Mar/2025 12:33:04] "GET /login HTTP/1.1" 200 -
+2025-03-30 13:23:22,865 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-30 13:23:22,865 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-30 13:23:22,866 - werkzeug - INFO -  * Restarting with stat
+2025-03-30 13:23:23,384 - werkzeug - WARNING -  * Debugger is active!
+2025-03-30 13:23:23,386 - werkzeug - INFO -  * Debugger PIN: 730-758-859
+2025-03-30 13:23:31,907 - werkzeug - ERROR - 127.0.0.1 - - [30/Mar/2025 13:23:31] code 400, message Bad request version ('\x19üf²\x05\x8bx\x0fÀÚpp\x00"\x13\x01\x13\x03\x13\x02À+À/Ì©Ì¨À,À0À')
+2025-03-30 13:23:31,907 - werkzeug - INFO - 127.0.0.1 - - [30/Mar/2025 13:23:31] "[31m[1m\x16\x03\x01\x07O\x01\x00\x07K\x03\x03½@´|}8\x15D\x10\x09\x90§Æ\x10\x0f×\x80õØ\x1b\x10ãjLS\x86í\x97±\x1a\x96\x00 \x17W\x0b\x87\x04<Q\x95¥®>å«»Ê¡!\x16î\x09\x19üf²\x05\x8bx\x0fÀÚpp\x00"\x13\x01\x13\x03\x13\x02À+À/Ì©Ì¨À,À0À[0m" 400 -
+2025-03-30 13:23:32,051 - werkzeug - ERROR - 127.0.0.1 - - [30/Mar/2025 13:23:32] code 400, message Bad request version ('75j¨¤V)º@_\x9a\x86\x13^Ù#«"ª)"ú\x10(8I¨\xadàaùØ\x00"\x13\x01\x13\x03\x13\x02À+À/Ì©Ì¨À,À0À')
+2025-03-30 13:23:32,051 - werkzeug - INFO - 127.0.0.1 - - [30/Mar/2025 13:23:32] "[31m[1m\x16\x03\x01\x07O\x01\x00\x07K\x03\x03Ýþ5>ü²Ó\x91\x86\x1f;ì\x8dK{J\x88w\x88\x7fùØ\x16\x18\x10\x11_\x053\x81\x98ß 75j¨¤V)º@_\x9a\x86\x13^Ù#«"ª)"ú\x10(8I¨­àaùØ\x00"\x13\x01\x13\x03\x13\x02À+À/Ì©Ì¨À,À0À[0m" 400 -
+2025-03-30 13:23:32,053 - werkzeug - ERROR - 127.0.0.1 - - [30/Mar/2025 13:23:32] code 400, message Bad request version ('±ìÂU]\x15zd\x90\x00"\x13\x01\x13\x03\x13\x02À+À/Ì©Ì¨À,À0À')
+2025-03-30 13:23:32,054 - werkzeug - INFO - 127.0.0.1 - - [30/Mar/2025 13:23:32] "[31m[1m\x16\x03\x01\x02~\x01\x00\x02z\x03\x03\x7fÎÌÿ\x89_\x14\x0b\x05´\x1a!áÜDKþï®x¶e$¦;Ö\x93\x08¸eê, Ù§srûZny~2LmN*n¹·¦TÌ\x82ç\x0b±ìÂU]\x15zd\x90\x00"\x13\x01\x13\x03\x13\x02À+À/Ì©Ì¨À,À0À[0m" 400 -
+2025-03-30 13:23:51,334 - werkzeug - INFO - 127.0.0.1 - - [30/Mar/2025 13:23:51] "GET /init-db HTTP/1.1" 200 -
+2025-03-30 13:23:52,881 - werkzeug - INFO - 127.0.0.1 - - [30/Mar/2025 13:23:52] "GET /login HTTP/1.1" 200 -
+2025-03-30 13:23:57,882 - healthcare_security - INFO - User 2 logged in without 2FA
+2025-03-30 13:23:57,883 - werkzeug - INFO - 127.0.0.1 - - [30/Mar/2025 13:23:57] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-30 13:23:57,899 - healthcare_security - INFO - Action logged: VIEW on Patient with ID 0 by user 2
+2025-03-30 13:23:57,909 - werkzeug - INFO - 127.0.0.1 - - [30/Mar/2025 13:23:57] "GET /dashboard HTTP/1.1" 200 -
+2025-03-30 13:23:58,028 - werkzeug - INFO - 127.0.0.1 - - [30/Mar/2025 13:23:58] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-30 13:24:33,377 - healthcare_security - INFO - User 2 logged out
+2025-03-30 13:24:33,378 - werkzeug - INFO - 127.0.0.1 - - [30/Mar/2025 13:24:33] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-03-30 13:24:33,390 - werkzeug - INFO - 127.0.0.1 - - [30/Mar/2025 13:24:33] "GET /login HTTP/1.1" 200 -
+2025-03-30 13:24:33,515 - werkzeug - INFO - 127.0.0.1 - - [30/Mar/2025 13:24:33] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
