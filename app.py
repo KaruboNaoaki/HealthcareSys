@@ -605,6 +605,7 @@ def init_db():
             patient_user.totp_secret = None  # Disable 2FA for testing
             db.session.add(patient_user)
         
+        # Commit users first to ensure they have IDs
         db.session.commit()
         
         # Add a patient record for the patient user if it doesn't exist
@@ -618,7 +619,10 @@ def init_db():
             patient.phone = "555-123-4567"
             db.session.add(patient)
             
-            # Add a sample medical record
+            # Commit the patient to get an ID before creating the medical record
+            db.session.commit()
+            
+            # Now add a sample medical record with the valid patient ID
             record = MedicalRecord(
                 patient_id=patient.id,
                 doctor_id=doctor.id,
@@ -630,6 +634,7 @@ def init_db():
             record.notes = "Patient reported feeling better after initial treatment"
             db.session.add(record)
         
+        # Final commit for any remaining changes
         db.session.commit()
         
         return '''
