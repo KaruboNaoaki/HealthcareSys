@@ -1,7 +1,7 @@
 # Secure Healthcare
 ## Initial Setup
 ### 1. Navigate into directory where repository was stored on your machine in Command Prompt
-### 2. install all dependencies with "pip install -r requirements.txt"
+### 2. Install all dependencies with "pip install -r requirements.txt"
 ### 2.1. Ignore any errors related to "Getting requirements to build wheel"
 ### 3. Set encryption key with "setx ENCRYPTION_KEY the_key_value_you_generated"
 ### 4. Run webapp with "python app.py"
