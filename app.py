@@ -403,7 +403,7 @@ def register():
             return render_template('register.html')
         
         # Create user
-        user = User(username=username, email=email, role=role)
+        user = User(username=username, email=email, role= 'patient', user_first_name = user_first_name, user_last_name = user_last_name)
         user.set_password(password)
         user.generate_totp_secret()  # Generate 2FA secret
         
@@ -601,6 +601,8 @@ def add_patient():
             # Create a new user account for the patient
             username = request.form.get('username')
             email = request.form.get('email')
+            user_first_name = request.form.get('first_name')
+            user_last_name = request.form.get('last_name') 
             
             # Check if username or email already exists
             if User.query.filter_by(username=username).first():
@@ -613,7 +615,7 @@ def add_patient():
             
             # Create patient user account
             password = secrets.token_urlsafe(10)  # Generate a random secure password
-            patient_user = User(username=username, email=email, role='patient')
+            patient_user = User(username=username, email=email, role='patient', user_first_name = user_first_name, user_last_name = user_last_name)
             patient_user.set_password(password)
             patient_user.generate_totp_secret()  # Generate 2FA secret
             
@@ -637,12 +639,55 @@ def add_patient():
             flash(f'Patient added successfully! Temporary password: {password}', 'success')
             return redirect(url_for('view_patient', patient_id=patient.id))
         
-        #except Exception as e:
-        #    db.session.rollback()
-        #    logger.error(f"Error adding patient: {str(e)}")
-        #    flash(f'Error adding patient', 'danger')
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error adding patient: {str(e)}")
+            flash(f'Error adding patient: {str(e)}', 'danger')
     
     return render_template('add_patient.html')
+
+@app.route('/add-user', methods=['GET', 'POST'])
+@login_required
+@role_required(['admin', 'doctor'])
+def add_user():
+    """Add a new user to the system"""
+    if request.method == 'POST':
+        try:
+            # Create a new user account for the patient
+            username = request.form.get('username')
+            email = request.form.get('email')
+            user_first_name = request.form.get('first_name')
+            user_last_name = request.form.get('last_name') 
+            role = request.form.get('role')
+            
+            # Check if username or email already exists
+            if User.query.filter_by(username=username).first():
+                flash('Username already exists', 'danger')
+                return render_template('add_patient.html')
+            
+            if User.query.filter_by(email=email).first():
+                flash('Email already exists', 'danger')
+                return render_template('add_patient.html')
+            
+            # Create patient user account
+            password = secrets.token_urlsafe(10)  # Generate a random secure password
+            user = User(username=username, email=email, role= role, user_first_name = user_first_name, user_last_name = user_last_name)
+            user.set_password(password)
+            user.generate_totp_secret()  # Generate 2FA secret
+            
+            db.session.add(user)
+            db.session.commit()  # Commit to get user ID
+            
+            log_action('CREATE', role, user.id, f'Created new user by {current_user.username}')
+            
+            flash(f'User added successfully! Temporary password: {password}. Secret Key for 2FA: {user.totp_secret}', 'success', )
+        
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error adding user: {str(e)}")
+            flash(f'Error adding user: {str(e)}', 'danger')
+    
+    return render_template('add_user.html')
 
 @app.route('/change-password', methods=['GET', 'POST'])
 @login_required
