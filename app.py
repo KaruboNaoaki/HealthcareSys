@@ -677,3 +677,91 @@ if __name__ == '__main__':
     
     # In production, you would use HTTPS
     app.run(debug=True)
+@app.route('/add-patient', methods=['GET', 'POST'])
+@login_required
+@role_required(['admin', 'doctor'])
+def add_patient():
+    """Add a new patient to the system"""
+    if request.method == 'POST':
+        try:
+            # Create a new user account for the patient
+            username = request.form.get('username')
+            email = request.form.get('email')
+            
+            # Check if username or email already exists
+            if User.query.filter_by(username=username).first():
+                flash('Username already exists', 'danger')
+                return render_template('add_patient.html')
+            
+            if User.query.filter_by(email=email).first():
+                flash('Email already exists', 'danger')
+                return render_template('add_patient.html')
+            
+            # Create patient user account
+            password = secrets.token_urlsafe(10)  # Generate a random secure password
+            patient_user = User(username=username, email=email, role='patient')
+            patient_user.set_password(password)
+            patient_user.generate_totp_secret()  # Generate 2FA secret
+            
+            db.session.add(patient_user)
+            db.session.commit()  # Commit to get user ID
+            
+            # Create patient profile
+            patient = Patient(user_id=patient_user.id)
+            patient.first_name = request.form.get('first_name')
+            patient.last_name = request.form.get('last_name')
+            patient.dob = request.form.get('dob')
+            patient.address = request.form.get('address')
+            patient.phone = request.form.get('phone')
+            
+            db.session.add(patient)
+            db.session.commit()
+            
+            log_action('CREATE', 'Patient', patient.id, f'Created new patient by {current_user.username}')
+            
+            flash(f'Patient added successfully! Temporary password: {password}', 'success')
+            return redirect(url_for('view_patient', patient_id=patient.id))
+        
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error adding patient: {str(e)}")
+            flash(f'Error adding patient', 'danger')
+    
+    return render_template('add_patient.html')
+
+@app.route('/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    """Allow users to change their password"""
+    if request.method == 'POST':
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+        
+        # Validate input
+        if not current_user.check_password(current_password):
+            flash('Current password is incorrect', 'danger')
+            return redirect(url_for('change_password'))
+        
+        if new_password != confirm_password:
+            flash('New passwords do not match', 'danger')
+            return redirect(url_for('change_password'))
+        
+        # Password complexity requirements
+        if len(new_password) < 10:
+            flash('Password must be at least 10 characters long', 'danger')
+            return redirect(url_for('change_password'))
+        
+        if not any(c.isupper() for c in new_password) or not any(c.islower() for c in new_password) or not any(c.isdigit() for c in new_password):
+            flash('Password must contain uppercase, lowercase, and numbers', 'danger')
+            return redirect(url_for('change_password'))
+        
+        # Update password
+        current_user.set_password(new_password)
+        db.session.commit()
+        
+        log_action('UPDATE', 'User', current_user.id, 'Changed password')
+        flash('Password updated successfully', 'success')
+        return redirect(url_for('profile'))
+    
+    return render_template('change_password.html')
