@@ -103,6 +103,8 @@ def decrypt_data(encrypted_data):
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
+    user_first_name = db.Column(db.String(80), nullable = False)
+    user_last_name = db.Column(db.String(80), nullable = False)
     password_hash = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     role = db.Column(db.String(20), nullable=False, default='patient')  # admin, doctor, patient
@@ -151,6 +153,7 @@ class Patient(db.Model):
     dob_encrypted = db.Column(db.Text, nullable=False)
     address_encrypted = db.Column(db.Text, nullable=False)
     phone_encrypted = db.Column(db.Text, nullable=False)
+    doctor_encrypted = db.Column(db.Text, nullable = False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
@@ -196,6 +199,18 @@ class Patient(db.Model):
     @phone.setter
     def phone(self, value):
         self.phone_encrypted = encrypt_data(value)
+
+    @property
+    def patient_doctor(self):
+        try:
+            return decrypt_data(self.doctor_encrypted)
+        except Exception as e:
+            logger.error(f"Error decrypting doctor for patient {self.id}: {e}")
+            return "[Decryption Error]"
+    
+    @patient_doctor.setter
+    def patient_doctor(self, value):
+        self.doctor_encrypted = encrypt_data(value)
 
 class MedicalRecord(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -374,6 +389,8 @@ def register():
         username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
+        user_first_name = request.form.get('user_first_name')
+        user_last_name = request.form.get('user_last_name')
         role = 'patient'  # Default role
         
         # Check if username or email already exists
@@ -494,6 +511,7 @@ def create_patient_profile():
             patient.dob = request.form.get('dob')
             patient.address = request.form.get('address')
             patient.phone = request.form.get('phone')
+            patient.patient_doctor = request.form.get('patient_doctor')
             
             db.session.add(patient)
             db.session.commit()
@@ -609,6 +627,7 @@ def add_patient():
             patient.dob = request.form.get('dob')
             patient.address = request.form.get('address')
             patient.phone = request.form.get('phone')
+            patient.patient_doctor = request.form.get('patient_doctor')
             
             db.session.add(patient)
             db.session.commit()
@@ -618,10 +637,10 @@ def add_patient():
             flash(f'Patient added successfully! Temporary password: {password}', 'success')
             return redirect(url_for('view_patient', patient_id=patient.id))
         
-        except Exception as e:
-            db.session.rollback()
-            logger.error(f"Error adding patient: {str(e)}")
-            flash(f'Error adding patient', 'danger')
+        #except Exception as e:
+        #    db.session.rollback()
+        #    logger.error(f"Error adding patient: {str(e)}")
+        #    flash(f'Error adding patient', 'danger')
     
     return render_template('add_patient.html')
 
@@ -675,7 +694,7 @@ def init_db():
         # Create admin user if not exists
         admin = User.query.filter_by(username='admin').first()
         if not admin:
-            admin = User(username='admin', email='admin@example.com', role='admin')
+            admin = User(username='admin', email='admin@example.com', role='admin', user_first_name = 'Alan', user_last_name = 'Adminson')
             admin.set_password('admin123')
             admin.totp_secret = None  # Disable 2FA for testing
             db.session.add(admin)
@@ -683,7 +702,7 @@ def init_db():
         # Create doctor user if not exists
         doctor = User.query.filter_by(username='doctor').first()
         if not doctor:
-            doctor = User(username='doctor', email='doctor@example.com', role='doctor')
+            doctor = User(username='doctor', email='doctor@example.com', role='doctor', user_first_name = 'Donald', user_last_name = 'Doctorson')
             doctor.set_password('doctor123')
             doctor.totp_secret = None  # Disable 2FA for testing
             db.session.add(doctor)
@@ -691,7 +710,7 @@ def init_db():
         # Create patient user if not exists
         patient_user = User.query.filter_by(username='patient').first()
         if not patient_user:
-            patient_user = User(username='patient', email='patient@example.com', role='patient')
+            patient_user = User(username='patient', email='patient@example.com', role='patient', user_first_name = 'Penny', user_last_name = 'Patientson')
             patient_user.set_password('patient123')
             patient_user.totp_secret = None  # Disable 2FA for testing
             db.session.add(patient_user)
@@ -703,11 +722,12 @@ def init_db():
         patient = Patient.query.filter_by(user_id=patient_user.id).first()
         if not patient:
             patient = Patient(user_id=patient_user.id)
-            patient.first_name = "John"
-            patient.last_name = "Doe"
+            patient.first_name = "Penny"
+            patient.last_name = "Patientson"
             patient.dob = "1980-01-01"
             patient.address = "123 Main St, Anytown, US"
             patient.phone = "555-123-4567"
+            patient.patient_doctor = "Dr. Donald Doctorson"
             db.session.add(patient)
             
             # Commit the patient to get an ID before creating the medical record

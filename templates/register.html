@@ -14,19 +14,36 @@
                 </div>
                 
                 <form method="POST" action="{{ url_for('register') }}">
+                    
                     <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
+                        <label for="user_first_name" class="form-label">First Name</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            <input type="text" class="form-control" id="username" name="username" required>
+                            <input type="text" class="form-control" id="user_first_name" name="user_first_name" required>
                         </div>
                     </div>
-                    
+
+                    <div class="mb-3">
+                        <label for="user_last_name" class="form-label">Last Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" class="form-control" id="user_last_name" name="user_last_name" required>
+                        </div>
+                    </div>
+
                     <div class="mb-3">
                         <label for="email" class="form-label">Email Address</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                             <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" class="form-control" id="username" name="username" required>
                         </div>
                     </div>
                     
