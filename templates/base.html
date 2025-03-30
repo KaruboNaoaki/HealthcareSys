@@ -40,6 +40,19 @@
             font-size: 0.8rem;
             margin-top: 15px;
         }
+        
+        /* Logout button styling */
+        .btn-logout {
+            color: white;
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        
+        .btn-logout:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -58,6 +71,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
                         </li>
+                        {% if current_user.role == 'doctor' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('add_patient') }}">Add Patient</a>
+                            </li>
+                        {% endif %}
                         {% if current_user.role == 'patient' and not current_user.patient %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('create_patient_profile') }}">Create Profile</a>
@@ -67,15 +85,15 @@
                 </ul>
                 <ul class="navbar-nav">
                     {% if current_user.is_authenticated %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user-circle me-1"></i>{{ current_user.username }}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('profile') }}">
+                                <i class="fas fa-user-circle me-1"></i> {{ current_user.username }}
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
-                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn-logout py-1 px-2 ms-2 rounded" href="{{ url_for('logout') }}">
+                                <i class="fas fa-sign-out-alt me-1"></i> Logout
+                            </a>
                         </li>
                     {% else %}
                         <li class="nav-item">
